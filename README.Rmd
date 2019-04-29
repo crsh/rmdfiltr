@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# rmdfiltr
+
+<!-- badges: start -->
+  [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+  [![Travis build status](https://travis-ci.org/crsh/rmdfiltr.svg?branch=master)](https://travis-ci.org/crsh/rmdfiltr)
+  [![CRAN status](https://www.r-pkg.org/badges/version/rmdfiltr)](https://cran.r-project.org/package=rmdfiltr)
+ <!-- badges: end -->
+
+`rmdfiltr` provides a collection of [Lua-filters](https://pandoc.org/lua-filters.html) that extend the functionality
+  of R Markdown templates.
+
+## Installation
+
+<!--
+You can install the released version of rmdfiltr from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("rmdfiltr")
+```
+-->
+
+You can install the development version from this GitHub repository with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("crsh/rmdfiltr")
+```
+
+
+## Example
+
+You can add a filter to any R Markdown template that accepts additional `pandoc` arguments.
+
+``` yaml
+---
+title: "Word count test"
+output:
+  html_document:
+    pandoc_args: !expr rmdfiltr::add_wordcount_filter()
+---
+```
+
+
+# Contributions
+
+Contributions of new filters are welcome.
+Pleas refer to the [contributing guidelines](.github/CONTRIBUTING.md) before you start working or open a pull request.
+Also, please note that the `rmdfiltr` project is released with a
+[Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
