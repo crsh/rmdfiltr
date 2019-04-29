@@ -5,14 +5,17 @@
 \alias{add_wordcount_filter}
 \title{Add Lua filter to pandoc arguments}
 \usage{
-add_lua_filter(args = NULL, filter_name)
+add_lua_filter(args = NULL, filter_name, report = "error")
 
-add_wordcount_filter(args = NULL)
+add_wordcount_filter(args = NULL, report = "error")
 }
 \arguments{
 \item{args}{Character. (Vector of) pandoc command line arguments.}
 
 \item{filter_name}{Character. Name of the Lua filter to add. See details.}
+
+\item{report}{Character. In case pandoc version is < 2.0 errors if
+\code{error}, warns if \code{warn}, or remains silent otherwise.}
 }
 \value{
 Character vector of pandoc command line arguments.

@@ -5,6 +5,7 @@
 #'
 #' @param args Character. (Vector of) pandoc command line arguments.
 #' @param filter_name Character. Name of the Lua filter to add. See details.
+#' @inheritParams verify_pandoc_version
 #'
 #' @details The following Lua filters are available. Convenience functions named
 #'   after the filter are available (e.g. \code{add_*_filter()}).
@@ -25,12 +26,12 @@
 #'
 #' add_lua_filter(NULL, "wordcount")
 
-add_lua_filter <- function(args = NULL, filter_name) {
+add_lua_filter <- function(args = NULL, filter_name, report = "error") {
   if(!is.null(args)) assertthat::assert_that(is.character(args))
   assertthat::assert_that(length(filter_name) == 1)
   assertthat::assert_that(is.character(filter_name))
 
-  if(verify_pandoc_version()) {
+  if(verify_pandoc_version(report = report)) {
     filter_path <- system.file(paste0(filter_name, ".lua"), package = "rmdfiltr")
     args <- c(args, "--lua-filter", filter_path)
   }
@@ -50,6 +51,6 @@ add_lua_filter <- function(args = NULL, filter_name) {
 #' @examples
 #' add_wordcount_filter(NULL)
 
-add_wordcount_filter <- function(args = NULL) {
+add_wordcount_filter <- function(args = NULL, report = "error") {
   add_lua_filter(args, "wordcount")
 }
