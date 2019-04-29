@@ -55,7 +55,7 @@ adding `pandoc` arguments with the preprocessor function.
 ``` r
 wordcount_html_document = function(...) {
   format <- rmarkdown::html_document(...)
-  format$pre_processor <- rmdfiltr::add_wordcount_filter(args)
+  format$pre_processor <- rmdfiltr::add_wordcount_filter
   format
 }
 ```
