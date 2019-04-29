@@ -1,0 +1,14 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+
+r:
+  - oldrel
+  - release
+  - devel
+
+pandoc_version: 2.3.1
+
+# Be strict when checking our package
+warnings_are_errors: true

@@ -3,16 +3,16 @@
 \name{add_lua_filter}
 \alias{add_lua_filter}
 \alias{add_wordcount_filter}
-\title{Add Lua-filter to pandoc arguments}
+\title{Add Lua filter to pandoc arguments}
 \usage{
-add_lua_filter(args, filter_name)
+add_lua_filter(args = NULL, filter_name)
 
-add_wordcount_filter(args)
+add_wordcount_filter(args = NULL)
 }
 \arguments{
 \item{args}{Character. (Vector of) pandoc command line arguments.}
 
-\item{filter_name}{Character. Name of the Lua-filter to add. See details.}
+\item{filter_name}{Character. Name of the Lua filter to add. See details.}
 }
 \value{
 Character vector of pandoc command line arguments.
@@ -20,18 +20,18 @@ Character vector of pandoc command line arguments.
 Character vector of pandoc command line arguments.
 }
 \description{
-Adds a Lua-filter supplied by \pkg{rmdfiltr} to the vector of pandoc command
+Adds a Lua filter supplied by \pkg{rmdfiltr} to the vector of pandoc command
 line arguments.
-
-Adds a Lua-filter to count words to the vector of pandoc command line
-arguments.
 }
 \details{
-The following Lua-filters are available. Convenience functions named
+The following Lua filters are available. Convenience functions named
   after the filter are available (e.g. \code{add_*_filter()}).
 
 \describe{
-  \item{\code{}}{}
+  \item{\code{wordcount}}{The body of the text and reference sections are
+  counted separately. The word count for the text body does not contain,
+  tables or images (or their captions). The filter reports the word count in
+  the console or the R Markdown tab in RStudio.}
 }
 }
 \examples{

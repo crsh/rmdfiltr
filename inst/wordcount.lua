@@ -35,8 +35,11 @@ function is_ref_div (blk)
 end
 
 function is_ref_header (blk)
-  local metadata_title = refs_title[1].c:lower():gsub(" ", "-")
-   return (blk.t == "Header" and (blk.identifier == "references" or blk.identifier == metadata_title))
+  local metadata_title = refs_title
+  if refs_title then
+    metadata_title = metadata_title[1].c:lower():gsub(" ", "-")
+  end
+  return (blk.t == "Header" and (blk.identifier == "references" or blk.identifier == metadata_title))
 end
 
 function get_all_refs (blks)
@@ -94,7 +97,6 @@ function Pandoc(el)
   end
 
   local untabled = remove_all_tables_images(el.blocks)
-  print("")
 
   refs_title = el.meta["reference-section-title"]
   local unreffed = remove_all_refs(untabled)
