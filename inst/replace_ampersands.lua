@@ -11,7 +11,13 @@ function get_lang_tag (meta)
   if meta.lang then
     lang_tag = meta.lang[1].c:gsub("-%a+", "")
   else
+    -- Default to English if not otherwise specified
     lang_tag = "en"
+  end
+
+  -- Default to English if translation is unavailable
+  if not and_dictionary[lang_tag] then
+    and_dictionary[lang_tag] = "and"
   end
 end
 

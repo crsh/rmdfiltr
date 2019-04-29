@@ -19,9 +19,11 @@
 #'      Otherwise \code{pandoc-citeproc} is applied twice.}
 #'   \item{\code{replace_ampersands}}{Searches for citations added by
 #'     \code{pandoc-citeproc} and replaces \code{&} with \code{and} in all
-#'     in-text citations (e.g., as required by APA style). Be sure to set
-#'     \code{citeproc: no} in the YAML front matter of the document and call
-#'     \code{pandoc-citeproc} manually (e.g., using \code{add_citeproc_filter}).}
+#'     in-text citations (e.g., as required by APA style). If \code{lang} is
+#'     specified in the documents YAML front matter, the corresponding
+#'     translation is used, if available. Be sure to set \code{citeproc: no} in
+#'     the YAML front matter of the document and call \code{pandoc-citeproc}
+#'     manually (e.g., using \code{add_citeproc_filter}).}
 #'   \item{\code{wordcount}}{The body of the text and reference sections are
 #'     counted separately. The word count for the text body does not contain,
 #'     tables or images (or their captions). The filter reports the word count in
