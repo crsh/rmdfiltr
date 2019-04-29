@@ -28,12 +28,13 @@
 
 add_lua_filter <- function(args = NULL, filter_name, report = "error") {
   if(!is.null(args)) assertthat::assert_that(is.character(args))
-  assertthat::assert_that(length(filter_name) == 1)
   assertthat::assert_that(is.character(filter_name))
 
   if(verify_pandoc_version(report = report)) {
-    filter_path <- system.file(paste0(filter_name, ".lua"), package = "rmdfiltr")
-    args <- c(args, "--lua-filter", filter_path)
+    for(i in filter_name) {
+      filter_path <- system.file(paste0(i, ".lua"), package = "rmdfiltr")
+      args <- c(args, "--lua-filter", filter_path)
+    }
   }
 
   args
