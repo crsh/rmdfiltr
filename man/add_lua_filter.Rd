@@ -3,11 +3,17 @@
 \name{add_lua_filter}
 \alias{add_lua_filter}
 \alias{add_wordcount_filter}
+\alias{add_citeproc_filter}
+\alias{add_replace_ampersands_filter}
 \title{Add Lua filter to pandoc arguments}
 \usage{
 add_lua_filter(args = NULL, filter_name, report = "error")
 
 add_wordcount_filter(args = NULL, report = "error")
+
+add_citeproc_filter(args = NULL, report = "error")
+
+add_replace_ampersands_filter(args = NULL, report = "error")
 }
 \arguments{
 \item{args}{Character. (Vector of) pandoc command line arguments.}
@@ -16,11 +22,6 @@ add_wordcount_filter(args = NULL, report = "error")
 
 \item{report}{Character. In case pandoc version is < 2.0 errors if
 \code{error}, warns if \code{warn}, or remains silent otherwise.}
-}
-\value{
-Character vector of pandoc command line arguments.
-
-Character vector of pandoc command line arguments.
 }
 \description{
 Adds a Lua filter supplied by \pkg{rmdfiltr} to the vector of pandoc command
@@ -31,15 +32,27 @@ The following Lua filters are available. Convenience functions named
   after the filter are available (e.g. \code{add_*_filter()}).
 
 \describe{
+  \item{\code{citeproc}}{Resolves and formats citations using a bibliography
+     file and a CSL stylesheet via \code{pandoc-citeproc}. This filter is
+     usually applied automatically in R Markdown, but specifying it manually
+     grants control over the order with which filters are applied. Be sure to
+     set \code{citeproc: no} in the YAML front matter of the document.
+     Otherwise \code{pandoc-citeproc} is applied twice.}
+  \item{\code{replace_ampersands}}{Searches for citations added by
+    \code{pandoc-citeproc} and replaces \code{&} with \code{and} in all
+    in-text citations (e.g., as required by APA style). Be sure to set
+    \code{citeproc: no} in the YAML front matter of the document and call
+    \code{pandoc-citeproc} manually (e.g., using \code{add_citeproc_filter}).}
   \item{\code{wordcount}}{The body of the text and reference sections are
-  counted separately. The word count for the text body does not contain,
-  tables or images (or their captions). The filter reports the word count in
-  the console or the R Markdown tab in RStudio.}
+    counted separately. The word count for the text body does not contain,
+    tables or images (or their captions). The filter reports the word count in
+    the console or the R Markdown tab in 'RStudio'.}
 }
 }
 \examples{
 
 add_lua_filter(NULL, "wordcount")
 add_wordcount_filter(NULL)
+add_replace_ampersands_filter(NULL)
+add_replace_ampersands_filter(NULL)
 }
-\concept{add_lua_filter}
