@@ -17,6 +17,7 @@ function get_lang_tag (meta)
 
   -- Default to English if translation is unavailable
   if not and_dictionary[lang_tag] then
+    print("\nWarning in replace_ampersands.lua:\n  Translation unavailable, defaulting to English. Request additional languages at <https://github.com/crsh/rmdfiltr>. \n\n")
     and_dictionary[lang_tag] = "and"
   end
 end
