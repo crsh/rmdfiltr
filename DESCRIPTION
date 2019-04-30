@@ -19,6 +19,11 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0
 Suggests: 
-    spelling (>= 2.1),
-    testthat (>= 2.0.0)
+  dplyr (>= 0.8.0.1),
+  ggplot2 (>= 3.0.0),
+  knitr (>= 1.22),
+  spelling (>= 2.1),
+  testthat (>= 2.0.0),
+  tibble (>= 2.1.1)
 Language: en-US
+VignetteBuilder: knitr

@@ -1,0 +1,151 @@
+---
+title     : "Lua word count filter"
+author    : "Frederik Aust"
+date      : "`r Sys.Date()`"
+
+output    : rmarkdown::html_vignette
+
+vignette  : >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library("rmdfiltr")
+library("tibble")
+library("dplyr")
+library("ggplot2")
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Using the word count filter
+
+The aim of the `rmdfiltr` word count filter is to provide a more accurate estimate of the number of words in a document than can be gleaned from the R Markdown source document.
+Output from (inline) R chunks as well as formatted citations and references can not enter the word count, when the source document is analyzed.
+Hence, the word count filter is applied after the document has been knitted and while it is being processed by `pandoc`.
+At this stage, the document is represented as an abstract syntax tree (AST), a semantic nested list, and can be manipulated by applying so-called filters.
+
+One the filters that is applied to R Markdown by default is `pandoc-citeproc`, which formats citations and inserts references.
+To obtain an accurate estimate, the word count filter should therefore be applied *after* `pandoc-citeproc` has been applied.
+To do so, it is necessary to disable the default application of `pandoc-citeproc`, because it is always applied last, by adding the following to the documents YAML front matter:
+
+~~~yaml
+citeproc: no
+~~~
+
+To manually apply `pandoc-citeproc` and subsequently the `rmdfiltr` word count filter add the `pandoc` arguments to the output format of your R Markdown document as `pandoc_args`.
+Each filter returns a vector of command line arguments; they take previous arguments as `args` and add to them.
+Hence, the calls to add filters can be nested:
+
+```{r single-filter}
+add_citeproc_filter(args = NULL)
+```
+
+```{r nested-filters}
+add_wordcount_filter(add_citeproc_filter(args = NULL))
+```
+
+When adding the filters to `pandoc_args` the R code needs to be preceded by `!expr` to declare it as to-be-interpreted expression.
+
+~~~yaml
+output:
+  html_document:
+    pandoc_args: !expr rmdfiltr::add_wordcount_filter(rmdfiltr::add_citeproc_filter(args = NULL))
+~~~
+
+The word count filter reports the word counts in the console or the R Markdown tab in RStudio, respectively.
+
+~~~
+285 words in text body
+23 words in reference section
+~~~
+
+
+# Word count filter performance
+
+The `rmdfiltr` filter is and adapted combination of [two](https://github.com/pandoc/lua-filters/blob/master/wordcount/wordcount.lua) [other](https://github.com/pandoc/lua-filters/blob/master/section-refs/section-refs.lua) Lua-filters by John MacFarlane and contributors.
+
+Although word counting appears to be a trivial matter, the counts of different methods often disagree.
+The magnitude of those disagreements depends on the complexity of the document.
+
+To get a feeling for the performance of the word count filter, I briefly compared the estimates for two documents across several common methods.
+The first document, a paper by Stahl & Aust ([2018](#references)) is a rather simple consisting of only text with citations and a reference section.
+The [second document](https://github.com/crsh/papaja/blob/master/example/example.Rmd) is a more complicated---it contains math, code, verbatim output, etc.
+
+The word counts for the text body do not contain, tables or images (or their captions), or the reference section (which required some manual labor in Word, Pages, and wordcounter.net).
+
+```{r word-counts, warning = FALSE, fig.dim = c(6, 3.5), fig.align = "center", echo = FALSE}
+tribble(
+  ~method, ~text, ~part, ~word_count,
+  "rmdfiltr", "Simple", "Body", 10830,
+  "rmdfiltr", "Simple", "References", 2321,
+  "rmdfiltr", "Complex", "Body", 1749,
+  "rmdfiltr", "Complex", "References", 322,
+  
+  "wordcountaddin", "Simple", "Body", 10761,
+  "wordcountaddin", "Simple", "References", NA,
+  "wordcountaddin", "Complex", "Body", 1407,
+  "wordcountaddin", "Complex", "References", NA,
+  
+  "texcount", "Simple", "Body", 10448 + 95,
+  "texcount", "Simple", "References", 2881,
+  "texcount", "Complex", "Body", 944 + 31,
+  "texcount", "Complex", "References", 400,
+  
+  "Word", "Simple", "Body", 10882,
+  "Word", "Simple", "References", 2407,
+  "Word", "Complex", "Body", 1712,
+  "Word", "Complex", "References", 329,
+  
+  "Pages", "Simple", "Body", 10812,
+  "Pages", "Simple", "References", 2777,
+  "Pages", "Complex", "Body", 1709,
+  "Pages", "Complex", "References", 429,
+  
+  "wordcounter.net", "Simple", "Body", 10605,
+  "wordcounter.net", "Simple", "References", 2333,
+  "wordcounter.net", "Complex", "Body", 1713,
+  "wordcounter.net", "Complex", "References", 324
+) %>%
+  group_by(text, part) %>% 
+  mutate(rel_word_count = word_count / max(word_count, na.rm = TRUE) * 100) %>%
+  ggplot(aes(x = method, y = rel_word_count, fill = method)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = round(rel_word_count), color = method), nudge_y = -12) +
+    geom_text(aes(label = prettyNum(word_count, big.mark = ","), color = method), nudge_y = -28 , size = 2.2) +
+    scale_fill_viridis_d() +
+    scale_color_manual(values = rep(c("white", "black"), each = 3)) +
+    facet_grid(part ~ text) +
+    labs(x = "Method", y = "Relative word count") +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+      , legend.position = "none"
+    )
+```
+
+
+Overall, all methods provide similar estimates for the text body of the simple document.
+Although the document contains a considerable number of citations, the `wordcountaddin` which is applied to the R Markdown source file before `pandoc-citeproc`, provides a good estimate.
+As expected there is less agreement on the word count for the shorter and more complex document.
+In particular, the `texcount` word count is off---it displayed several errors related to the displayed R code and verbatim output.
+I think the errors may have caused `texcount` to ignore some bits and are probably the reason for the low word count of the text body.
+Similarly, the `wordcountaddin` cannot count the verbatim output.
+
+The pattern for the reference sections of the simple and complex documents are comparable.
+Pages and `texcount` count more words than Word, wordcounter.net and the `rmdfiltr` word count filter.
+I suspect the difference is due to how the methods handle the URLs in the references.
+The `wordcountaddin` cannot provide a word count for reference sections.
+
+Overall I'm fairly happy with the performance of the `rmdfiltr` filter.
+The word counts are quite similar to those of the majority of the other methods.
+I'm sure the filter can be improved (and I'll gladly take any suggestion) but I think in its current form it is a decent solution.
+
+
+# References
+Stahl, C., & Aust, F. (2018). Evaluative conditioning as memory-based judgment. Social Psychological Bulletin, 13(3), Article e28589. https://doi.org/10.5964/spb.v13i3.28589
