@@ -6,21 +6,22 @@ date      : "`r Sys.Date()`"
 output    : rmarkdown::html_vignette
 
 vignette  : >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Lua word count filter}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-library("rmdfiltr")
-library("tibble")
-library("dplyr")
-library("ggplot2")
-
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+```
+
+```{r setup, include = FALSE}
+library("tibble")
+library("dplyr")
+library("ggplot2")
 ```
 
 # Using the word count filter
@@ -43,11 +44,16 @@ Each filter returns a vector of command line arguments; they take previous argum
 Hence, the calls to add filters can be nested:
 
 ```{r single-filter}
+library("rmdfiltr")
 add_citeproc_filter(args = NULL)
 ```
 
-```{r nested-filters}
+```{r nested-filters-display, eval = FALSE}
 add_wordcount_filter(add_citeproc_filter(args = NULL))
+```
+
+```{r nested-filters, echo = FALSE}
+add_wordcount_filter(add_citeproc_filter(args = NULL, report = "silent"), report = "silent")
 ```
 
 When adding the filters to `pandoc_args` the R code needs to be preceded by `!expr` to declare it as to-be-interpreted expression.
