@@ -1,10 +1,11 @@
 local lang_tag = nil
 
 local and_dictionary = {
-  de = "und",
   en = "and",
-  nl = "en",
-  es = "y"
+  es = "y",
+  fr = "et",
+  de = "und",
+  nl = "en"
 }
 
 function get_lang_tag (meta)
