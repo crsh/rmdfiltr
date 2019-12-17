@@ -1,14 +1,15 @@
 Package: rmdfiltr
 Type: Package
-Title: Lua filters for R Markdown
-Version: 0.1.0
+Title: 'Lua' filters for R Markdown
+Version: 0.1.2
 Authors@R: c(
     person("Frederik", "Aust", email = "frederik.aust@uni-koeln.de", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4900-788X"))
   )
 URL: https://github.com/crsh/rmdfiltr
 BugReports: https://github.com/crsh/rmdfiltr/issues
-Description: Provides a collection of Lua filters that extend the functionality
-  of R Markdown templates.
+Description: A collection of 'Lua' filters that extend the functionality
+  of R Markdown templates (e.g., count words or post-process 'pandoc-citeproc'-
+  citations).
 Imports:
     assertthat (>= 0.2.1),
     utils,
@@ -17,7 +18,7 @@ SystemRequirements: pandoc (>= 2.0; https://pandoc.org)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Suggests: 
   dplyr (>= 0.8.0.1),
   ggplot2 (>= 3.0.0),

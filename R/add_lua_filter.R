@@ -8,7 +8,8 @@
 #' @param lua Logical. Whether the filter(s) was written in Lua (results in
 #'   \code{--lau-filter}-call) or not (results in \code{--filter}-call). Will be
 #'   recycled to fit length of \code{filter_path}.
-#' @inheritParams verify_pandoc_version
+#' @param error Logical. Whether to throw an error if (required version of)
+#'   \code{pandoc} is not available.
 #'
 #' @details The following Lua filters are available from \pkg{rmdfiltr}.
 #'   Convenience functions named after the filter are available
@@ -34,54 +35,65 @@
 #'
 #' @examples
 #'
-#' add_lua_filter(NULL, "wordcount", report = "silent")
+#' add_lua_filter(NULL, "wordcount", error = FALSE)
 
-add_lua_filter <- function(args = NULL, filter_name, report = "error") {
+add_lua_filter <- function(args = NULL, filter_name, error = TRUE) {
   assertthat::assert_that(is.character(filter_name))
 
   filter_path <- system.file(paste0(filter_name, ".lua"), package = "rmdfiltr")
-  add_custom_filter(args, filter_path = filter_path, lua = TRUE, report = report)
+  add_custom_filter(args, filter_path = filter_path, lua = TRUE, error = error)
 }
 
 #' @rdname add_lua_filter
 #' @export
 #' @examples
-#' add_wordcount_filter(NULL, report = "silent")
+#' add_wordcount_filter(NULL, error = FALSE)
 
-add_wordcount_filter <- function(args = NULL, report = "error") {
-  add_lua_filter(args, "wordcount", report = report)
+add_wordcount_filter <- function(args = NULL, error = TRUE) {
+  add_lua_filter(args, "wordcount", error = error)
 }
 
 #' @rdname add_lua_filter
 #' @export
 #' @examples
-#' add_replace_ampersands_filter(NULL, report = "silent")
+#' add_replace_ampersands_filter(NULL, error = FALSE)
 
-add_replace_ampersands_filter <- function(args = NULL, report = "error") {
-  add_lua_filter(args, "replace_ampersands", report = report)
+add_replace_ampersands_filter <- function(args = NULL, error = TRUE) {
+  add_lua_filter(args, "replace_ampersands", error = error)
 }
 
 #' @rdname add_lua_filter
 #' @export
 #' @examples
-#' add_citeproc_filter(NULL)
+#' add_citeproc_filter(NULL, error = FALSE)
 
-add_citeproc_filter <- function(args = NULL, report = "error") {
-  citeproc_path <- utils::getFromNamespace("pandoc_citeproc", "rmarkdown")
-  add_custom_filter(args, filter_path = citeproc_path(), lua = FALSE, report = report)
+add_citeproc_filter <- function(args = NULL, error = TRUE) {
+  if(rmarkdown::pandoc_available(error = error)) {
+    citeproc_path <- utils::getFromNamespace("pandoc_citeproc", "rmarkdown")
+    add_custom_filter(args, filter_path = citeproc_path(), lua = FALSE, error = error)
+  } else {
+    NULL
+  }
 }
 
 #' @rdname add_lua_filter
 #' @export
 #' @examples
-#' add_custom_filter(NULL, filter_path = "foo/bar")
+#' add_custom_filter(NULL, filter_path = "foo/bar", error = FALSE)
 
-add_custom_filter <- function(args = NULL, filter_path, lua = FALSE, report = "error") {
+add_custom_filter <- function(args = NULL, filter_path, lua = FALSE, error = TRUE) {
   if(!is.null(args)) assertthat::assert_that(is.character(args))
   assertthat::assert_that(is.character(filter_path))
   assertthat::assert_that(is.logical(lua))
 
-  if(any(lua)) verify_pandoc_version(report = report)
+  if(any(lua)) {
+    tryCatch(
+      rmarkdown::pandoc_available("2.0", error = error)
+      , error = function(e) stop(paste("For Lua filters,", e$message), call. = FALSE)
+    )
+  } else {
+    rmarkdown::pandoc_available(error = error)
+  }
 
   lua <- rep_len(lua, length(filter_path))
   filter_call <- ifelse(lua, "--lua-filter", "--filter")

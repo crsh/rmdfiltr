@@ -8,24 +8,24 @@
 \alias{add_custom_filter}
 \title{Add filter to pandoc arguments}
 \usage{
-add_lua_filter(args = NULL, filter_name, report = "error")
+add_lua_filter(args = NULL, filter_name, error = TRUE)
 
-add_wordcount_filter(args = NULL, report = "error")
+add_wordcount_filter(args = NULL, error = TRUE)
 
-add_replace_ampersands_filter(args = NULL, report = "error")
+add_replace_ampersands_filter(args = NULL, error = TRUE)
 
-add_citeproc_filter(args = NULL, report = "error")
+add_citeproc_filter(args = NULL, error = TRUE)
 
 add_custom_filter(args = NULL, filter_path, lua = FALSE,
-  report = "error")
+  error = TRUE)
 }
 \arguments{
 \item{args}{Character. (Vector of) pandoc command line arguments.}
 
 \item{filter_name}{Character. Name(s) of the Lua filter to add. See details.}
 
-\item{report}{Character. In case pandoc version is < 2.0 errors if
-\code{error}, warns if \code{warn}, or remains silent otherwise.}
+\item{error}{Logical. Whether to throw an error if (required version of)
+\code{pandoc} is not available.}
 
 \item{filter_path}{Character. Path to filter file.}
 
@@ -59,9 +59,9 @@ The following Lua filters are available from \pkg{rmdfiltr}.
 }
 \examples{
 
-add_lua_filter(NULL, "wordcount", report = "silent")
-add_wordcount_filter(NULL, report = "silent")
-add_replace_ampersands_filter(NULL, report = "silent")
-add_citeproc_filter(NULL)
-add_custom_filter(NULL, filter_path = "foo/bar")
+add_lua_filter(NULL, "wordcount", error = FALSE)
+add_wordcount_filter(NULL, error = FALSE)
+add_replace_ampersands_filter(NULL, error = FALSE)
+add_citeproc_filter(NULL, error = FALSE)
+add_custom_filter(NULL, filter_path = "foo/bar", error = FALSE)
 }

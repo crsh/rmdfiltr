@@ -11,6 +11,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://travis-ci.org/crsh/rmdfiltr.svg?branch=master)](https://travis-ci.org/crsh/rmdfiltr)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rmdfiltr)](https://cran.r-project.org/package=rmdfiltr)
+\[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/last-month/rmdfiltr)
 <!-- badges: end -->
 
 `rmdfiltr` provides a collection of
@@ -67,8 +69,9 @@ details on how to create custom formats.
 # Contributions
 
 Contributions of new filters are welcome. Pleas refer to the
-[contributing guidelines](.github/CONTRIBUTING.md) before you start
-working or open a pull request. Also, please note that the `rmdfiltr`
-project is released with a [Contributor Code of
-Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project,
-you agree to abide by its terms.
+[contributing
+guidelines](https://github.com/crsh/rmdfiltr/blob/master/.github/CONTRIBUTING.md)
+before you start working or open a pull request. Also, please note that
+the `rmdfiltr` project is released with a [Contributor Code of
+Conduct](https://github.com/crsh/rmdfiltr/blob/master/.github/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.

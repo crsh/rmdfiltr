@@ -39,9 +39,14 @@ To manually apply `pandoc-citeproc` and subsequently the ampersand replacement f
 Each filter returns a vector of command line arguments; they take previous arguments as `args` and add to them.
 Hence, the calls to add filters can be nested:
 
-```{r single-filter}
+```{r single-filter-display, eval = FALSE}
 library("rmdfiltr")
 add_citeproc_filter(args = NULL)
+```
+
+```{r single-filter, echo = FALSE}
+library("rmdfiltr")
+add_citeproc_filter(args = NULL, error = FALSE)
 ```
 
 ```{r nested-filters-display, eval = FALSE}
@@ -49,7 +54,7 @@ add_replace_ampersands_filter(add_citeproc_filter(args = NULL))
 ```
 
 ```{r nested-filters, echo = FALSE}
-add_replace_ampersands_filter(add_citeproc_filter(args = NULL, report = "silent"), report = "silent")
+add_replace_ampersands_filter(add_citeproc_filter(args = NULL, error = FALSE), error = FALSE)
 ```
 
 When adding the filters to `pandoc_args` the R code needs to be preceded by `!expr` to declare it as to-be-interpreted expression.
