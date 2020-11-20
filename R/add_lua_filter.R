@@ -69,7 +69,7 @@ add_replace_ampersands_filter <- function(args = NULL, error = TRUE) {
 
 add_citeproc_filter <- function(args = NULL, error = TRUE) {
   if(rmarkdown::pandoc_available(error = error)) {
-    if(rmarkdown::pandoc_version() > "2.11") {
+    if(rmarkdown::pandoc_version() >= "2.11") {
       c(args, "--citeproc")
     } else {
       citeproc_path <- utils::getFromNamespace("pandoc_citeproc", "rmarkdown")
