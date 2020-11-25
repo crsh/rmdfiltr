@@ -52,7 +52,7 @@ output:
 ```
 
 Of course, you can also use the filters in a custom R Markdown format by
-adding `pandoc` arguments with the preprocessor function.
+adding `pandoc` arguments with the pre-processor function.
 
 ``` r
 wordcount_html_document = function(...) {

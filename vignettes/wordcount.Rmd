@@ -31,15 +31,15 @@ Output from (inline) R chunks as well as formatted citations and references can 
 Hence, the word count filter is applied after the document has been knitted and while it is being processed by `pandoc`.
 At this stage, the document is represented as an abstract syntax tree (AST), a semantic nested list, and can be manipulated by applying so-called filters.
 
-One the filters that is applied to R Markdown by default is `pandoc-citeproc`, which formats citations and inserts references.
-To obtain an accurate estimate, the word count filter should therefore be applied *after* `pandoc-citeproc` has been applied.
-To do so, it is necessary to disable the default application of `pandoc-citeproc`, because it is always applied last, by adding the following to the documents YAML front matter:
+One the filters that is applied to R Markdown by default is `citeproc` (previously `pandoc-citeproc`), which formats citations and inserts references.
+To obtain an accurate estimate, the word count filter should therefore be applied *after* `citeproc` has been applied.
+To do so, it is necessary to disable the default application of `citeproc`, because it is always applied last, by adding the following to the documents YAML front matter:
 
 ~~~yaml
 citeproc: no
 ~~~
 
-To manually apply `pandoc-citeproc` and subsequently the `rmdfiltr` word count filter add the `pandoc` arguments to the output format of your R Markdown document as `pandoc_args`.
+To manually apply `citeproc` and subsequently the `rmdfiltr` word count filter add the `pandoc` arguments to the output format of your R Markdown document as `pandoc_args`.
 Each filter returns a vector of command line arguments; they take previous arguments as `args` and add to them.
 Hence, the calls to add filters can be nested:
 
@@ -86,9 +86,9 @@ The magnitude of those disagreements depends on the complexity of the document.
 
 To get a feeling for the performance of the word count filter, I briefly compared the estimates for two documents across several common methods.
 The first document, a paper by Stahl & Aust ([2018](#references)) is a rather simple consisting of only text with citations and a reference section.
-The [second document](https://github.com/crsh/papaja/blob/master/example/example.Rmd) is a more complicated---it contains math, code, verbatim output, etc.
+The [second document](https://github.com/crsh/papaja/blob/master/inst/example/example.rmd) is a more complicated---it contains math, code, verbatim output, etc.
 
-The word counts for the text body do not contain, tables or images (or their captions), or the reference section (which required some manual labor in Word, Pages, and wordcounter.net).
+The word counts for the text body do not contain, tables or images (or their captions), or the reference section (which required some manual labor in Word, Pages, and `wordcounter.net`).
 
 ```{r word-counts, warning = FALSE, fig.dim = c(6, 3.5), fig.align = "center", echo = FALSE}
 tribble(
@@ -142,14 +142,14 @@ tribble(
 
 
 Overall, all methods provide similar estimates for the text body of the simple document.
-Although the document contains a considerable number of citations, the `wordcountaddin` which is applied to the R Markdown source file before `pandoc-citeproc`, provides a good estimate.
+Although the document contains a considerable number of citations, the `wordcountaddin` which is applied to the R Markdown source file before `citeproc`, provides a good estimate.
 As expected there is less agreement on the word count for the shorter and more complex document.
 In particular, the `texcount` word count is off---it displayed several errors related to the displayed R code and verbatim output.
 I think the errors may have caused `texcount` to ignore some bits and are probably the reason for the low word count of the text body.
 Similarly, the `wordcountaddin` cannot count the verbatim output.
 
 The pattern for the reference sections of the simple and complex documents are comparable.
-Pages and `texcount` count more words than Word, wordcounter.net and the `rmdfiltr` word count filter.
+Pages and `texcount` count more words than Word, `wordcounter.net` and the `rmdfiltr` word count filter.
 I suspect the difference is due to how the methods handle the URLs in the references.
 The `wordcountaddin` cannot provide a word count for reference sections.
 

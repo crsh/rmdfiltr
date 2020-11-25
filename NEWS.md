@@ -1,4 +1,8 @@
-# rmdfiltr 0.1.0
+# rmdfiltr 0.1.3
+
+* Adds support for `citeproc`.
+
+# rmdfiltr 0.1.2
 
 * Updates pandoc-checks to comply with CRAN policy; replaces `report` argument
   with `error` flag.

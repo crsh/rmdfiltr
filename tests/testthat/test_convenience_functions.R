@@ -13,11 +13,17 @@ test_that(
 
     skip_on_cran()
 
-    citeproc_path <- utils::getFromNamespace("pandoc_citeproc", "rmarkdown")
+
+    if(rmarkdown::pandoc_version() >= "2.11") {
+      filter_args <- "--citeproc"
+    } else {
+      citeproc_path <- utils::getFromNamespace("pandoc_citeproc", "rmarkdown")
+      filter_args <- c("--filter", citeproc_path())
+    }
 
     expect_identical(
       add_citeproc_filter(NULL, error = FALSE)
-      , c("--filter", citeproc_path())
+      , filter_args
     )
   }
 )
