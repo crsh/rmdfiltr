@@ -24,12 +24,39 @@ function get_lang_tag (meta)
 end
 
 function replace_ampersands (el)
-  if el.c[1][1].mode == "AuthorInText" then
-    for key,value in pairs(el.c[2]) do
-      for key2,value2 in pairs(value) do
-        if value2 == "&" then el.c[2][key][key2] = and_dictionary[lang_tag] end
+  if #el.citations > 0 then -- See https://github.com/jgm/citeproc/issues/31
+--    for key, value in pairs(el) do
+--        print(key, " -- ", value)
+--    end
+--    print(#el.citations)
+--    for key, value in pairs(el.citations[1]) do
+--        print(key, " -- ", value)
+--    end
+--    for key, value in pairs(el.content) do
+--        for key2,value2 in pairs(value) do
+--          print(key2, " -- ", value2)
+--      end
+--    end
+    if el.citations[1].mode == "AuthorInText" then
+      for key,value in pairs(el.content) do
+        for key2,value2 in pairs(value) do
+          if value2 == "&" then el.content[key][key2] = and_dictionary[lang_tag] end
+        end
       end
     end
+--  else
+--    for key, value in pairs(el) do
+--        print(key, " -- ", value)
+--    end
+--    print(#el.citations)
+--    for key, value in pairs(el.citations) do
+--        print(key, " -- ", value)
+--    end
+--    for key, value in pairs(el.content) do
+--        for key2,value2 in pairs(value) do
+--          print(key2, " -- ", value2)
+--      end
+--    end
   end
   return el
 end
