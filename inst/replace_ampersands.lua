@@ -10,7 +10,7 @@ local and_dictionary = {
 
 function get_lang_tag (meta)
   if meta.lang then
-    lang_tag = meta.lang[1].c:gsub("-%a+", "")
+    lang_tag = string.gsub(pandoc.utils.stringify(meta.lang), "-%a+", "")
   else
     -- Default to English if not otherwise specified
     lang_tag = "en"
