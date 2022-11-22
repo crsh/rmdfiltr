@@ -10,7 +10,7 @@ local and_dictionary = {
 
 function get_lang_tag (meta)
   if meta.lang then
-    lang_tag = meta.lang[1].c:gsub("-%a+", "")
+    lang_tag = string.gsub(pandoc.utils.stringify(meta.lang), "-%a+", "")
   else
     -- Default to English if not otherwise specified
     lang_tag = "en"
@@ -18,7 +18,7 @@ function get_lang_tag (meta)
 
   -- Default to English if translation is unavailable
   if not and_dictionary[lang_tag] then
-    print("\nWarning in replace_ampersands.lua:\n  Translation unavailable, defaulting to English. Request additional languages at <https://github.com/crsh/rmdfiltr>. \n\n")
+    print("\nWarning in replace_ampersands.lua:\n  Translation unavailable, defaulting to English. Did you use a valid BCP 47 language tag (e.g. 'en-US' or 'nl-NL')? If so, request additional languages at <https://github.com/crsh/rmdfiltr>. \n\n")
     and_dictionary[lang_tag] = "and"
   end
 end
