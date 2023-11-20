@@ -3,6 +3,7 @@
 export(add_citeproc_filter)
 export(add_custom_filter)
 export(add_lua_filter)
+export(add_pandoc_zotxt_filter)
 export(add_replace_ampersands_filter)
 export(add_wordcount_filter)
 export(verify_pandoc_version)

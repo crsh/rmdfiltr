@@ -64,6 +64,15 @@ add_replace_ampersands_filter <- function(args = NULL, report = "error") {
 #' @rdname add_lua_filter
 #' @export
 #' @examples
+#' add_pandoc_zotxt_filter(NULL, report = "silent")
+
+add_pandoc_zotxt_filter <- function(args = NULL, report = "error") {
+  c("--data-dir", system.file(package = "rmdfiltr"), add_lua_filter(args, "pandoc_zotxt", report = report))
+}
+
+#' @rdname add_lua_filter
+#' @export
+#' @examples
 #' add_citeproc_filter(NULL)
 
 add_citeproc_filter <- function(args = NULL, report = "error") {

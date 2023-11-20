@@ -4,6 +4,7 @@
 \alias{add_lua_filter}
 \alias{add_wordcount_filter}
 \alias{add_replace_ampersands_filter}
+\alias{add_pandoc_zotxt_filter}
 \alias{add_citeproc_filter}
 \alias{add_custom_filter}
 \title{Add filter to pandoc arguments}
@@ -13,6 +14,8 @@ add_lua_filter(args = NULL, filter_name, report = "error")
 add_wordcount_filter(args = NULL, report = "error")
 
 add_replace_ampersands_filter(args = NULL, report = "error")
+
+add_pandoc_zotxt_filter(args = NULL, report = "error")
 
 add_citeproc_filter(args = NULL, report = "error")
 
@@ -62,6 +65,7 @@ The following Lua filters are available from \pkg{rmdfiltr}.
 add_lua_filter(NULL, "wordcount", report = "silent")
 add_wordcount_filter(NULL, report = "silent")
 add_replace_ampersands_filter(NULL, report = "silent")
+add_pandoc_zotxt_filter(NULL, report = "silent")
 add_citeproc_filter(NULL)
 add_custom_filter(NULL, filter_path = "foo/bar")
 }
