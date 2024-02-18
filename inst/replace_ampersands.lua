@@ -5,7 +5,8 @@ local and_dictionary = {
   es = "y",
   fr = "et",
   de = "und",
-  nl = "en"
+  nl = "en",
+  nb = "og"
 }
 
 function get_lang_tag (meta)
