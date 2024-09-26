@@ -1,3 +1,7 @@
+# rmdfiltr 0.1.4
+
+* Adds character count filter.
+
 # rmdfiltr 0.1.3
 
 * Adds support for `citeproc`.
