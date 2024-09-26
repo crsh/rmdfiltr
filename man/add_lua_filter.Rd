@@ -3,6 +3,7 @@
 \name{add_lua_filter}
 \alias{add_lua_filter}
 \alias{add_wordcount_filter}
+\alias{add_charcount_filter}
 \alias{add_replace_ampersands_filter}
 \alias{add_citeproc_filter}
 \alias{add_custom_filter}
@@ -12,12 +13,13 @@ add_lua_filter(args = NULL, filter_name, error = TRUE)
 
 add_wordcount_filter(args = NULL, error = TRUE)
 
+add_charcount_filter(args = NULL, error = TRUE)
+
 add_replace_ampersands_filter(args = NULL, error = TRUE)
 
 add_citeproc_filter(args = NULL, error = TRUE)
 
-add_custom_filter(args = NULL, filter_path, lua = FALSE,
-  error = TRUE)
+add_custom_filter(args = NULL, filter_path, lua = FALSE, error = TRUE)
 }
 \arguments{
 \item{args}{Character. (Vector of) pandoc command line arguments.}
@@ -61,6 +63,7 @@ The following Lua filters are available from \pkg{rmdfiltr}.
 
 add_lua_filter(NULL, "wordcount", error = FALSE)
 add_wordcount_filter(NULL, error = FALSE)
+add_charcount_filter(NULL, error = FALSE)
 add_replace_ampersands_filter(NULL, error = FALSE)
 add_citeproc_filter(NULL, error = FALSE)
 add_custom_filter(NULL, filter_path = "foo/bar", error = FALSE)

@@ -7,31 +7,31 @@
   https://github.com/pandoc/lua-filters/blob/master/wordcount/wordcount.lua
   and
   https://github.com/pandoc/lua-filters/blob/master/section-refs/section-refs.lua
-  ]]
+]]
 
 local body_words = 0
 local ref_words = 0
 
 function is_table (blk)
-   return (blk.t == "Table")
+  return (blk.t == "Table")
 end
 
 function is_image (blk)
-   return (blk.t == "Image")
+  return (blk.t == "Image")
 end
 
 function remove_all_tables_images (blks)
-   local out = {}
-   for _, b in pairs(blks) do
-      if not (is_table(b) or is_image(b)) then
-	      table.insert(out, b)
-      end
-   end
-   return out
+  local out = {}
+  for _, b in pairs(blks) do
+    if not (is_table(b) or is_image(b)) then
+      table.insert(out, b)
+    end
+  end
+  return out
 end
 
 function is_ref_div (blk)
-   return (blk.t == "Div" and blk.identifier == "refs")
+  return (blk.t == "Div" and blk.identifier == "refs")
 end
 
 function is_ref_header (blk)
@@ -44,22 +44,22 @@ end
 
 function get_all_refs (blks)
   local out = {}
-   for _, b in pairs(blks) do
-      if is_ref_div(b) then
-	      table.insert(out, b)
-      end
-   end
-   return out
+  for _, b in pairs(blks) do
+    if is_ref_div(b) then
+      table.insert(out, b)
+    end
+  end
+  return out
 end
 
 function remove_all_refs (blks)
-   local out = {}
-   for _, b in pairs(blks) do
-      if not (is_ref_div(b) or is_ref_header(b)) then
-	      table.insert(out, b)
-      end
-   end
-   return out
+  local out = {}
+  for _, b in pairs(blks) do
+    if not (is_ref_div(b) or is_ref_header(b)) then
+      table.insert(out, b)
+    end
+  end
+  return out
 end
 
 body_count = {

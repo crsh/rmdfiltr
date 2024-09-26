@@ -56,6 +56,15 @@ add_wordcount_filter <- function(args = NULL, error = TRUE) {
 #' @rdname add_lua_filter
 #' @export
 #' @examples
+#' add_charcount_filter(NULL, error = FALSE)
+
+add_charcount_filter <- function(args = NULL, error = TRUE) {
+  add_lua_filter(args, "charcount", error = error)
+}
+
+#' @rdname add_lua_filter
+#' @export
+#' @examples
 #' add_replace_ampersands_filter(NULL, error = FALSE)
 
 add_replace_ampersands_filter <- function(args = NULL, error = TRUE) {
