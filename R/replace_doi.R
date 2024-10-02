@@ -15,12 +15,16 @@
 #' })
 #' @export
 
-replace_doi_citations <- function(rmd, bib = "__from_DOI.bib") {
+replace_doi_citations <- function(rmd, bib = NULL) {
   if(!require("bibtex", quietly = TRUE)) {
     stop("The package `bibtex` is not avialable but required to replace DOI citations in a source document. Please install the package and try again.")
   }
   if(!require("stringr", quietly = TRUE)) {
     stop("The package `stringr` is not avialable but required to replace DOI citations in a source document. Please install the package and try again.")
+  }
+
+  if(is.null(bib)) {
+    return(invisible(FALSE))
   }
 
   entries <- lapply(bib, bibtex::read.bib) |>

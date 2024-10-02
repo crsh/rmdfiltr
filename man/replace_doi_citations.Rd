@@ -4,7 +4,7 @@
 \alias{replace_doi_citations}
 \title{Replace DOI citations in R Markdown document}
 \usage{
-replace_doi_citations(rmd, bib = "__from_DOI.bib")
+replace_doi_citations(rmd, bib = NULL)
 }
 \arguments{
 \item{rmd}{A character vector specifying the path to the R Markdown file 

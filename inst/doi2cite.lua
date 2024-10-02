@@ -11,6 +11,7 @@
 base_url = "http://api.crossref.org"
 mailto = "pandoc.doi2cite@gmail.com"
 bibname = "__from_DOI.bib"
+run_filter = true
 key_list = {};
 doi_key_map = {};
 doi_entry_map = {};
@@ -30,7 +31,8 @@ function Meta(m)
     local bib_data = m.bibliography
     
     if not bib_data then
-        print("No bibliography files specified. Skipping filter.")
+        run_filter = false
+        print("doi2cite: No bibliography files specified. Skipping filter.")
         return -- Exit the function early if no bibliography files are specified
     end
 
@@ -71,6 +73,10 @@ end
 -- Get bibtex data of doi-based citation.id and make bibliography.
 -- Then, replace "citation.id"
 function Cite(c)
+    if not run_filter then
+        return c -- Skip citation processing if filter is not active
+    end
+
     for _, citation in pairs(c.citations) do
         local id = citation.id:gsub('%s+', ''):gsub('%%2F', '/')
         if id:sub(1,16) == "https://doi.org/" then
