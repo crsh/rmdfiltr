@@ -74,6 +74,15 @@ add_replace_ampersands_filter <- function(args = NULL, error = TRUE) {
 #' @rdname add_lua_filter
 #' @export
 #' @examples
+#' add_doi2cite_filter(NULL, error = FALSE)
+
+add_doi2cite_filter <- function(args = NULL, error = TRUE) {
+  add_lua_filter(args, "doi2cite", error = error)
+}
+
+#' @rdname add_lua_filter
+#' @export
+#' @examples
 #' add_citeproc_filter(NULL, error = FALSE)
 
 add_citeproc_filter <- function(args = NULL, error = TRUE) {

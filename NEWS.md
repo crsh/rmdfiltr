@@ -1,6 +1,7 @@
 # rmdfiltr 0.1.4
 
 * Adds character count filter.
+* Adds adapted [`doi2cite`](https://github.com/korintje/pandoc-doi2cite/blob/main/doi2cite.lua) filter.
 
 # rmdfiltr 0.1.3
 

@@ -3,6 +3,8 @@
 export(add_charcount_filter)
 export(add_citeproc_filter)
 export(add_custom_filter)
+export(add_doi2cite_filter)
 export(add_lua_filter)
 export(add_replace_ampersands_filter)
 export(add_wordcount_filter)
+export(replace_doi_citations)

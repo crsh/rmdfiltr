@@ -74,6 +74,9 @@ details on how to create custom formats.
   to the console.
 - `replace_ampersands`: Replaces all ampersands in in-text citation with
   `and` (or the equivalent in other languages).
+- [`doi2cite`](https://github.com/korintje/pandoc-doi2cite/blob/main/doi2cite.lua):
+  Generates `.bib` file from the DOIs in a document and convert the DOIs
+  into BibTeX citation keys.
 
 # Contributions
 

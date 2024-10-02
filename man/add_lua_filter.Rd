@@ -5,6 +5,7 @@
 \alias{add_wordcount_filter}
 \alias{add_charcount_filter}
 \alias{add_replace_ampersands_filter}
+\alias{add_doi2cite_filter}
 \alias{add_citeproc_filter}
 \alias{add_custom_filter}
 \title{Add filter to pandoc arguments}
@@ -16,6 +17,8 @@ add_wordcount_filter(args = NULL, error = TRUE)
 add_charcount_filter(args = NULL, error = TRUE)
 
 add_replace_ampersands_filter(args = NULL, error = TRUE)
+
+add_doi2cite_filter(args = NULL, error = TRUE)
 
 add_citeproc_filter(args = NULL, error = TRUE)
 
@@ -65,6 +68,7 @@ add_lua_filter(NULL, "wordcount", error = FALSE)
 add_wordcount_filter(NULL, error = FALSE)
 add_charcount_filter(NULL, error = FALSE)
 add_replace_ampersands_filter(NULL, error = FALSE)
+add_doi2cite_filter(NULL, error = FALSE)
 add_citeproc_filter(NULL, error = FALSE)
 add_custom_filter(NULL, filter_path = "foo/bar", error = FALSE)
 }
