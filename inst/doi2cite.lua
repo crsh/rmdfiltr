@@ -28,6 +28,12 @@ error_strs["<html><body><h1>503 Service Unavailable</h1>\n"
 -- Get bibliography filepath from yaml metadata
 function Meta(m)
     local bib_data = m.bibliography
+    
+    if not bib_data then
+        print("No bibliography files specified. Skipping filter.")
+        return -- Exit the function early if no bibliography files are specified
+    end
+
     local bibpaths = get_paths_from(bib_data)
     bibpath = find_filepath(bibname, bibpaths)
     bibpath = verify_path(bibpath)
