@@ -40,8 +40,8 @@ function Meta(m)
     bibpath = find_filepath(bibname, bibpaths)
     bibpath = verify_path(bibpath)
 
-    for bibpath, _ in pairs(bibpaths) do
-        local f = io.open(bibpath, "r")
+    for bibfile, _ in pairs(bibpaths) do
+        local f = io.open(bibfile, "r")
         if f then
             entries_str = f:read('*all')
             if entries_str then
@@ -58,7 +58,7 @@ function Meta(m)
                         doi_key_map[doi] = key
                     else
                         -- If DOI is already present, skip adding the entry
-                        print("doi2cite: Duplicate DOI found in `" .. bibpath .. "` and skipped: " .. doi)
+                        print("doi2cite: Duplicate DOI found in `" .. bibfile .. "` and skipped: " .. doi)
                     end
                 end
             end
@@ -127,7 +127,7 @@ end
 function get_bibentry(doi)
     local entry_str = doi_entry_map[doi]
     if entry_str == nil then
-        print("Request DOI: " .. doi)
+        print("Requesting DOI: " .. doi)
         local url = base_url.."/works/"
             ..doi.."/transform/application/x-bibtex"
             .."?mailto="..mailto

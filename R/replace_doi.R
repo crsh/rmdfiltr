@@ -27,7 +27,27 @@ replace_doi_citations <- function(rmd, bib = NULL) {
     return(invisible(FALSE))
   }
 
-  entries <- lapply(bib, bibtex::read.bib) |>
+  # Ensure valid bib files
+  existant_bib <- sapply(bib, file.exists)
+  
+  if(!any(existant_bib)) {
+    stop(
+      "None of the specified BibTeX files exists:\n"
+      , paste(bib, sep = "\n")
+    )
+  }
+
+  if(!all(existant_bib)) {
+    warning(
+      "The following specified BibTeX files do not exist:\n"
+      , paste(bib[!existant_bib], sep = "\n")
+    )
+  }
+
+  empty_bib <- sapply(bib[existant_bib], file.size) == 0
+
+  # Process bib files
+  entries <- lapply(bib[existant_bib & !empty_bib], bibtex::read.bib) |>
     do.call("c", args = _) |>
     (\(x) x$doi)()
 
