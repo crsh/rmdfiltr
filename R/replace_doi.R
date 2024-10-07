@@ -36,6 +36,7 @@ replace_doi_citations <- function(rmd, bib = NULL) {
   rmd <- gsub("\\.knit\\.md$", ".Rmd", rmd)
   if(!file.exists(rmd)) {
     rmd <- gsub("Rmd$", "rmd", rmd)
+    if(!file.exists(rmd)) stop("Cannot locate source file at", rmd, "or", gsub("rmd$", "Rmd", rmd), ".")
   }
 
   stringr::str_replace_all(
