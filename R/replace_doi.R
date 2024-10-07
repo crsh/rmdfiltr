@@ -4,7 +4,7 @@
 #' with the corresponding entries from a BibTeX file. Requires the package
 #' `bibtex` to be installed.
 #'
-#' @param rmd A character vector specifying the path to the R Markdown file 
+#' @param rmd A character vector specifying the path to the R Markdown file
 #'   (UTF-8 encoding expected).
 #' @param bib A character vector specifying the path to the BibTeX file
 #'   (UTF-8 encoding expected).
@@ -35,7 +35,7 @@ replace_doi_citations <- function(rmd, bib = NULL) {
 
   rmd <- gsub("\\.knit\\.md$", ".Rmd", rmd)
   if(!file.exists(rmd)) {
-    rmd <- gsub("Rmd$", ".rmd", rmd)
+    rmd <- gsub("Rmd$", "rmd", rmd)
   }
 
   stringr::str_replace_all(
