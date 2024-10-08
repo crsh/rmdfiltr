@@ -63,7 +63,7 @@ replace_doi_citations <- function(rmd, bib = NULL) {
     readLines_utf8(con = rmd)
     , setNames(
       paste0("@", names(entries))
-      , paste0("@(doi:|DOI:|(https://)*doi.org/)*", entries)
+      , paste0("@(doi:|DOI:|(https://)*doi.org/)*((", toupper(entries), ")|(", tolower(entries), "))")
     )
   ) |>
     writeLines(con = rmd, useBytes = TRUE)
