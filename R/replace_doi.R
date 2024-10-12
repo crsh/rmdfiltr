@@ -4,18 +4,12 @@
 #' with the corresponding entries from a BibTeX file. Requires the package
 #' `bibtex` to be installed.
 #'
-#' @param rmd A character vector specifying the path to the R Markdown file
-#'   (UTF-8 encoding expected).
-#' @param bib A character vector specifying the path to the BibTeX file
-#'   (UTF-8 encoding expected).
+#' @param input_file Character. Path to the input file provided to the post-processor.
+#' @param bib Character. A (vector of) path(s) to the BibTeX file(s).
 #' @return Returns `TRUE` invisibly.
-#' @examples
-#' dontrun({
-#' replace_doi_citations("myreport.Rmd")
-#' })
 #' @export
 
-replace_doi_citations <- function(rmd, bib = NULL) {
+post_process_doi_citations <- function(input_file, bib) {
   if(!require("bibtex", quietly = TRUE)) {
     stop("The package `bibtex` is not avialable but required to replace DOI citations in a source document. Please install the package and try again.")
   }
@@ -49,7 +43,7 @@ replace_doi_citations <- function(rmd, bib = NULL) {
   # Process bib files
   entries <- lapply(bib[existant_bib & !empty_bib], bibtex::read.bib) |>
     do.call("c", args = _) |>
-    (\(x) x$doi)()
+    (\(x) setNames(x$doi, names(x)))()
 
   entries <- entries[!is.na(entries) & !duplicated(entries)]
 
@@ -69,6 +63,17 @@ replace_doi_citations <- function(rmd, bib = NULL) {
     writeLines(con = rmd, useBytes = TRUE)
 
   invisible(TRUE)
+}
+
+#' @rdname post_process_doi_citations
+#' @export
+
+replace_resolved_doi_citations <- function() {
+  rmd <- knitr::current_input()
+  bib <- rmarkdown::metadata$bibliography
+  if(file.exists(bib)) {
+    rmdfiltr::post_process_doi_citations(rmd, bib)
+  }
 }
 
 #' @keywords internal

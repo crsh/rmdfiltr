@@ -1,0 +1,77 @@
+---
+title     : "Cite references using only the DOI"
+author    : "Frederik Aust"
+date      : "`r Sys.Date()`"
+
+output    : rmarkdown::html_vignette
+
+vignette  : >
+  %\VignetteIndexEntry{Lua word count filter}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Using the doi2cite filter
+
+The [`doi2cite`](https://github.com/korintje/pandoc-doi2cite?tab=readme-ov-file) is a fantastic filter by [@korintje](https://github.com/korintje) that extends `citeproc` and allows you to add citations using only the work's DOI.
+
+In essence, `doi2cite` searches the Markdown documents for citations that start with `doi:`, `DOI:`, `doi.org/` or `https://doi.org/`, extracts the DOI, queries CrossRef for the bibliographic information, writes it to a local BibTeX-file and replaces the citation key by the proper BibTeX key.
+Now `citeproc` can process the citation and will do the rest.
+I have adapted the filter to work with multiple bibliography files and and have provide additional post-processing functions to streamline the use with R Markdown.
+The key issue to solve here is that `doi2cite` replaces DOI with BibTeX handles in the intermediate Markdown document, but not in the R Markdown source file.
+Doing this requies an additional post-processing step that is done by `rmdfilter::replace_doi_citations()`.
+
+To use the `doi2cite` filter, we need to do two things:
+
+1. Use `rmdfiltr::add_doi2cite_filter()` to add an argument to the call to pandoc
+2. Add the the designated file "__from_DOI.bib" (it currently has to be this file name!) to the `bibliography` field of the YAML front matter
+
+When adding the filters to `pandoc_args` the R code needs to be preceded by `!expr` to declare it as to-be-interpreted expression.
+
+~~~yaml
+bibliograph: "__from_DOI.bib"
+output:
+  html_document:
+    pandoc_args: !expr rmdfiltr::add_doi2cite_filter(args = NULL)
+~~~
+
+In the resulting HTML file, the citation tags `@doi:10.1037/xlm0001360` will be rendered as `Marsh et al. (2024)`.
+However, the DOI-based citation tag remains in the source R Markdown file.
+To replace it with the BibTeX citation handle requies an additional post-processing step.
+
+A makeshift solution to this is to call `rmdfiltr::replace_resolved_doi_citations()` in the R Markdown document.
+The function will check the bibliography files in the YAML front matter for matching DOIs and replace the DOI in the R Markdown document with the corresponding reference handles.
+Because `doi2cite` is run *after* `rmdfiltr::replace_resolved_doi_citations()`, this will only work for DOI citations that were resolved in a previous knitting process.
+
+To resolve this remaining issue, it is necessary to create a custom **rmarkdown** format.
+Now, we can add to the `doi2cite` filter to the pandoc arguments and add `rmdfiltr::replace_resolved_doi_citations()` to the post processor.
+The following is sketch of the essential parts of the custom format:
+
+```{r}
+#| eval: false
+#| echo: true
+
+my_format <- rmarkdown::output_format(
+  pre_processor = \(...) {
+    rmdfiltr::add_doi2cite_filter(args = NULL)
+  }
+  , post_processor = \(input_file, metadata, ...) {
+    rmdfiltr::post_process_doi_citations(input_file, metadata$bibliography)
+  }
+  , ...
+)
+```
+
+With these pre- and post-processors, the DOI-based citations will be replaced by the BibTeX citation handles in the R Markdown source file.
+That is, the citation tag `@doi:10.1037/xlm0001360` will be replaced by `@Marsh_2024` in the R Markdown source file and rendered to `Marsh et al. (2024)` in the output.
+
+# References
+
+Marsh, John E., Mark J. Hurlstone, Alexandre Marois, Linden J. Ball, Stuart B. Moore, François Vachon, Sabine J. Schlittmeier, et al. (2024). Changing-State Irrelevant Speech Disrupts Visual–Verbal but Not Visual–Spatial Serial Recall. *Journal of Experimental Psychology: Learning, Memory, and Cognition*. https://doi.org/10.1037/xlm0001360.
