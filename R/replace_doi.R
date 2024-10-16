@@ -10,10 +10,10 @@
 #' @export
 
 post_process_doi_citations <- function(input_file, bib) {
-  if(!require("bibtex", quietly = TRUE)) {
+  if(!requireNamespace("bibtex", quietly = TRUE)) {
     stop("The package `bibtex` is not avialable but required to replace DOI citations in a source document. Please install the package and try again.")
   }
-  if(!require("stringr", quietly = TRUE)) {
+  if(!requireNamespace("stringr", quietly = TRUE)) {
     stop("The package `stringr` is not avialable but required to replace DOI citations in a source document. Please install the package and try again.")
   }
 
@@ -43,11 +43,11 @@ post_process_doi_citations <- function(input_file, bib) {
   # Process bib files
   entries <- lapply(bib[existant_bib & !empty_bib], bibtex::read.bib) |>
     do.call("c", args = _) |>
-    (\(x) setNames(x$doi, names(x)))()
+    (\(x) stats::setNames(x$doi, names(x)))()
 
   entries <- entries[!is.na(entries) & !duplicated(entries)]
 
-  rmd <- gsub("\\.knit\\.md$", ".Rmd", rmd)
+  rmd <- gsub("\\.knit\\.md$", ".Rmd", input_file)
   if(!file.exists(rmd)) {
     rmd <- gsub("Rmd$", "rmd", rmd)
     if(!file.exists(rmd)) stop("Cannot locate source file at", rmd, "or", gsub("rmd$", "Rmd", rmd), ".")
@@ -55,7 +55,7 @@ post_process_doi_citations <- function(input_file, bib) {
 
   stringr::str_replace_all(
     readLines_utf8(con = rmd)
-    , setNames(
+    , stats::setNames(
       paste0("@", names(entries))
       , paste0("@(doi:|DOI:|(https://)*doi.org/)*((", toupper(entries), ")|(", tolower(entries), "))")
     )
