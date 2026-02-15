@@ -11,6 +11,11 @@ test_that(
       , add_replace_ampersands_filter(error = FALSE)
     )
 
+    expect_identical(
+      add_lua_filter(filter_name = "critic-markup", error = FALSE)
+      , add_criticmarkup_filter(error = FALSE)
+    )
+
     skip_on_cran()
 
 
