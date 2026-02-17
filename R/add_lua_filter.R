@@ -29,6 +29,12 @@
 #'       tables or images (or their captions). The filter reports the word count in
 #'       the console or the R Markdown tab in 'RStudio'. For details see
 #'       \code{vignette("wordcount", package = "rmdfiltr")}.}
+#'     \item{\code{critic-markup}}{Processes CriticMarkup syntax for tracking
+#'       changes in LaTeX, HTML, and DOCX documents. Supports three modes:
+#'       \code{markup} (default, displays markup with colors), \code{original}
+#'       (shows original text), and \code{edited} (shows edited version). Mode is
+#'       set via \code{critic-mode} in YAML front matter. For LaTeX output,
+#'       requires package pdfcomment.}
 #'   }
 #'
 #' @export
@@ -78,6 +84,15 @@ add_replace_ampersands_filter <- function(args = NULL, error = TRUE) {
 
 add_doi2cite_filter <- function(args = NULL, error = TRUE) {
   add_lua_filter(args, "doi2cite", error = error)
+}
+
+#' @rdname add_lua_filter
+#' @export
+#' @examples
+#' add_criticmarkup_filter(NULL, error = FALSE)
+
+add_criticmarkup_filter <- function(args = NULL, error = TRUE) {
+  add_lua_filter(args, "critic-markup", error = error)
 }
 
 #' @rdname add_lua_filter

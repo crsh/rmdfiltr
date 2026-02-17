@@ -6,6 +6,7 @@
 \alias{add_charcount_filter}
 \alias{add_replace_ampersands_filter}
 \alias{add_doi2cite_filter}
+\alias{add_criticmarkup_filter}
 \alias{add_citeproc_filter}
 \alias{add_custom_filter}
 \title{Add filter to pandoc arguments}
@@ -19,6 +20,8 @@ add_charcount_filter(args = NULL, error = TRUE)
 add_replace_ampersands_filter(args = NULL, error = TRUE)
 
 add_doi2cite_filter(args = NULL, error = TRUE)
+
+add_criticmarkup_filter(args = NULL, error = TRUE)
 
 add_citeproc_filter(args = NULL, error = TRUE)
 
@@ -60,6 +63,12 @@ The following Lua filters are available from \pkg{rmdfiltr}.
       tables or images (or their captions). The filter reports the word count in
       the console or the R Markdown tab in 'RStudio'. For details see
       \code{vignette("wordcount", package = "rmdfiltr")}.}
+    \item{\code{critic-markup}}{Processes CriticMarkup syntax for tracking
+      changes in LaTeX, HTML, and DOCX documents. Supports three modes:
+      \code{markup} (default, displays markup with colors), \code{original}
+      (shows original text), and \code{edited} (shows edited version). Mode is
+      set via \code{critic-mode} in YAML front matter. For LaTeX output,
+      requires package pdfcomment.}
   }
 }
 \examples{
@@ -69,6 +78,7 @@ add_wordcount_filter(NULL, error = FALSE)
 add_charcount_filter(NULL, error = FALSE)
 add_replace_ampersands_filter(NULL, error = FALSE)
 add_doi2cite_filter(NULL, error = FALSE)
+add_criticmarkup_filter(NULL, error = FALSE)
 add_citeproc_filter(NULL, error = FALSE)
 add_custom_filter(NULL, filter_path = "foo/bar", error = FALSE)
 }
