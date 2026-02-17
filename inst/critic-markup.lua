@@ -23,7 +23,7 @@ Initial version copied verbatim from:
 https://github.com/mloubout/critic-markup/blob/main/_extensions/critic-markup/critic-markup.lua
 ]]
 
--- Critic Markup filter for Quarto
+-- Critic Markup filter for Quarto and R Markdown
 -- Allows rendering markup, original or edited versions.
 
 local critic_mode = 'markup'
@@ -625,23 +625,42 @@ local function criticheader(meta)
 
   -- Set up macros and rules for current format/mode
   setup_markup()
-  if FORMAT:match 'html' then
-    -- For HTML, support all modes. Only include the interactive UI when
-    -- rendering markup mode; in original/edited, emit static HTML.
-    if critic_mode == 'markup' then
-      quarto.doc.add_html_dependency({
-        name = 'critic',
-        scripts = { 'critic.min.js' },
-        stylesheets = { 'critic.css' },
-      })
-      quarto.doc.include_text('after-body', scriptcode)
+
+  -- Handle Quarto vs R Markdown differently
+  if quarto then
+    -- Quarto: use quarto.doc API
+    if FORMAT:match 'html' then
+      -- For HTML, support all modes. Only include the interactive UI when
+      -- rendering markup mode; in original/edited, emit static HTML.
+      if critic_mode == 'markup' then
+        quarto.doc.add_html_dependency({
+          name = 'critic',
+          scripts = { 'critic.min.js' },
+          stylesheets = { 'critic.css' },
+        })
+        quarto.doc.include_text('after-body', scriptcode)
+      end
+    else
+      -- latex header always includes mode-appropriate macro definitions
+      if latexcode then
+        quarto.doc.include_text('in-header', latexcode)
+      end
     end
   else
-    -- latex header always includes mode-appropriate macro definitions
-    if latexcode then
-      quarto.doc.include_text('in-header', latexcode)
+    -- R Markdown: add headers to metadata
+    if FORMAT:match 'latex' and latexcode then
+      -- For LaTeX, add macro definitions to header-includes
+      local header_includes = meta['header-includes']
+      if not header_includes then
+        header_includes = pandoc.MetaList{}
+      elseif header_includes.t == 'MetaInlines' or header_includes.t == 'MetaBlocks' then
+        header_includes = pandoc.MetaList{header_includes}
+      end
+      header_includes[#header_includes + 1] = pandoc.MetaBlocks{pandoc.RawBlock('latex', latexcode)}
+      meta['header-includes'] = header_includes
     end
   end
+
   return meta
 end
 
